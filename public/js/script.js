@@ -18,9 +18,4 @@ $(function(){
 		askSensor();
 	})
 
-	// Hello from server
-	// socket.on('sensor is ON', function(data) {
-	// 	console.log(data.message);
-	// })
-
 })

@@ -120,10 +120,6 @@ io.sockets.on('connection', function (socket) {
 	})
 
 
-	// if ($data.length >= 25){
- //    	socket.emit('sensor is ON', { message: 'Sensor is ON' });
-	// }
-
 
 
 });
