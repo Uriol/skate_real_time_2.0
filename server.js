@@ -103,12 +103,12 @@ function parse(data){
 	}
 }
 
-
+var trickData;
 // Sockets
 io.sockets.on('connection', function (socket) {
 
 	console.log('soket on in server');
-
+	// Check if sensor is on
 	socket.on('sensor state ?', function(){
 		if ($data.length >= 25){
 			console.log('sensor is ON');
@@ -119,6 +119,12 @@ io.sockets.on('connection', function (socket) {
 		}
 	})
 
+
+	// Send trick data to FE
+	socket.on('trick data', function(){
+		trickData = $data.slice(-250);
+		socket.emit('new trick data', trickData);
+	})
 
 
 
