@@ -1,0 +1,12 @@
+{
+    "name": "RealTime_Skate",
+    "version": "0.0.0",
+    "description": "RealTime Skateboarding Visualizations",
+    "dependencies": {
+        "socket.io": "latest",
+        "express": "latest",
+        "jade": "latest",
+        "bluetooth-serial-port": "latest"
+    },
+    "author": "Oriol Bella"
+}
