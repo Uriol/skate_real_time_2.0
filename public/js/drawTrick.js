@@ -26,6 +26,12 @@ var animationInterval;
 
 
 function drawTrick(){
+ 
+ 	// console.log('centerYposition: ' + centerYposition);
+ 	// if (centerYposition == undefined){
+ 	// 	console.log('no jump');
+ 	// }
+
 	// Reset values
 	position_tail = new THREE.Vector3(); 
 	position_center = new THREE.Vector3();
@@ -82,7 +88,7 @@ function drawTrick(){
 		// Get color
 		if($color_state[i] == 'before jump'){
 			grey_value_before_jump += grey_gradient_before_jump;
-			console.log('grey_value_before_jump: ' + grey_value_before_jump);
+			//console.log('grey_value_before_jump: ' + grey_value_before_jump);
 			darkGrey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
 			grey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
 			//darkGrey = new THREE.Color("rgb(250, 0, 0)");
@@ -90,7 +96,7 @@ function drawTrick(){
 		} else if( $color_state[i] == 'after jump'){
 			grey_value_after_jump -= grey_gradient_after_jump;
 			if (grey_value_after_jump < 0) { grey_value_after_jump = 0;}
-			console.log('grey_value_after_jump: ' + grey_value_after_jump);
+			//console.log('grey_value_after_jump: ' + grey_value_after_jump);
 			// edge color
 			//darkGrey = new THREE.Color("rgb(250, 0, 0)");
 			darkGrey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
@@ -114,7 +120,9 @@ function drawTrick(){
 		// 	reception = true;
 		// } else { reception = false; }
 
-
+		if (centerYposition == undefined){
+			centerYposition = -200;
+		}
 		// Calculate x pos increment
 		actual_x_position = (this_y_position*pixelMultiplier)-centerYposition*-1;
 		//console.log(' actual xpos: ' + actual_x_position);

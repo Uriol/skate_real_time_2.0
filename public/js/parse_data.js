@@ -53,6 +53,7 @@ var before_jump = 0,
 	jump_ended = false;
 
 //var $reception = [];
+var jump = false;
 
 $(function(){
 
@@ -155,6 +156,8 @@ function restartValues(){
 	air_interval = 0;
 	jumpHeight = 0;
 
+	jump = false;
+
 
 }
 
@@ -209,9 +212,19 @@ function switchState(){
 			onGround();
 		} else if ( state == 'air' ){
 			onAir();
+			jump = true;
 		}
 	}
+	console.log('Jump?: ' + jump);
 }
+
+// function noJump(){
+// 	for(var j = 0; j < $state.length; j++){
+// 		state = $state[k];
+// 		if 
+// 	}
+// }
+
 
 // Calculate position when skate is on ground
 function onGround(){
@@ -241,10 +254,12 @@ function onGround(){
 	// Calculate x positions
 	xSpeed = totalSpeed*Math.sin(total_angle_diff);
 	xPosition = xPreviousPosition + xSpeed*time;
+	console.log('xPosition: ' + xPosition);
 	xPreviousPosition = xPosition;
 	// Calculate y positions
 	ySpeed = totalSpeed*Math.cos(total_angle_diff);
 	yPosition = yPreviousPosition + ySpeed*time;
+	console.log('yPosition: ' + yPosition);
 	yPreviousPosition = yPosition;
 
 	// Update z: is always 0 on ground
