@@ -2,6 +2,27 @@ var scene, camera, renderer;
 var particles_1, particles_2,particles_3, fogs;
 
 
+var black = new THREE.Color("rgb(0,0,0)");
+	var blackMaterial = new THREE.MeshBasicMaterial(  {color: black}  );
+	var blackMaterialBack = new THREE.MeshBasicMaterial(  {color: black}  );
+
+	var yellow = new THREE.Color("rgb(184, 228, 20)");
+	var yellowMaterial = new THREE.MeshBasicMaterial({ color: yellow });
+	var yellowMaterialBack = new THREE.MeshBasicMaterial({ color: yellow });
+
+	var blue = new THREE.Color("rgb(0, 200, 255)");
+	var blueMaterial = new THREE.MeshBasicMaterial({ color:blue });
+	var blueMaterialBack = new THREE.MeshBasicMaterial({ color:blue });
+
+	var darkGrey = new THREE.Color("rgb(30, 30, 30)");
+	var darkGreyMaterial = new THREE.MeshBasicMaterial({ color: darkGrey });
+
+	var darkerGrey = new THREE.Color("rgb(0, 0, 0)");
+	var floorMaterial = new THREE.MeshBasicMaterial({ color: darkerGrey });
+
+
+	
+
 $(function(){
 
 	init();

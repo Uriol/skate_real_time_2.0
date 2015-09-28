@@ -80,6 +80,7 @@ $(function(){
 		parseTrickData(trickdata);
 		calculateAverage();
 		switchState();
+		drawTrick();
 	})
 
 }) // End doc ready
