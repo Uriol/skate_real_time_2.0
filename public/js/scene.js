@@ -15,13 +15,15 @@ var black = new THREE.Color("rgb(0,0,0)");
 	var blueMaterialBack = new THREE.MeshBasicMaterial({ color:blue });
 
 	var darkGrey = new THREE.Color("rgb(30, 30, 30)");
+	var grey = new THREE.Color("rgb(30, 30, 30)");
+	//var grey, darkGrey;
 	var darkGreyMaterial = new THREE.MeshBasicMaterial({ color: darkGrey });
 
 	var darkerGrey = new THREE.Color("rgb(0, 0, 0)");
 	var floorMaterial = new THREE.MeshBasicMaterial({ color: darkerGrey });
 
 
-	
+
 
 $(function(){
 

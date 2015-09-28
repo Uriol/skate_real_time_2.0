@@ -52,6 +52,8 @@ var before_jump = 0,
 	$color_state = [],
 	jump_ended = false;
 
+//var $reception = [];
+
 $(function(){
 
 	// Check if sensor is on
@@ -76,6 +78,7 @@ $(function(){
 	})
 	// Recieve new trick data
 	socket.on('new trick data', function(trickdata){
+		resetVisuals();
 		restartValues();
 		parseTrickData(trickdata);
 		calculateAverage();
@@ -215,7 +218,7 @@ function onGround(){
 	// Push color (grey) state in array
 	if(jump_ended == false){
 		before_jump += 1;
-		$color_state.push('before_jump')
+		$color_state.push('before jump')
 	} else {
 		after_jump += 1;
 		$color_state.push('after jump')
@@ -257,6 +260,8 @@ function onGround(){
 	$total_y_positions.push(yPosition);
 	$total_z_positions.push(zPosition);
 
+	//$reception.push(0);
+
 }
 
 function onAir(){
@@ -279,14 +284,16 @@ function onAir(){
 		jump_ended = true;
 		$color_state.push('after jump');
 		after_jump += 1;
+		//$reception.push(1);
 	} else {
-		$color_state.push('jump');
+		//$reception.push(0);
+		$color_state.push('before jump');
 		during_jump += 1;
 	}
 
 	// Calculate z position
 	zPosition = airSpeed*elapsedTimeOnAir-0.5*gravity*elapsedTimeOnAir*elapsedTimeOnAir;
-	console.log('z position: ' + zPosition);
+	//console.log('z position: ' + zPosition);
 	// Calculate x position: keeps constant
 	xPosition = xPreviousPosition + xSpeed*time;
 	xPreviousPosition = xPosition;
@@ -360,6 +367,23 @@ function calculateLanding(){
 	    else { yawOnLanding = yawOnLanding; 
 	    	console.log("case 4: final yawOnLanding not 180");}
   	}
+}
+
+// Delete skate objects
+function resetVisuals(){
+	if (trick_animation == true) {
+		trick_animation = false;
+		clearInterval(animationInterval);
+	}
+
+	// Remove previous skate objects
+	var obj, i;
+	for (i = scene.children.length - 1; i >= 0; i --) {
+		obj = scene.children[i];
+		if(obj.name == 'skateboardObject'){
+			scene.remove(obj);
+		}
+	}
 }
 
 // Steps to parse data

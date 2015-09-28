@@ -6,6 +6,7 @@ function drawLines_center(){
 		//grey = new THREE.Color("rgb(250, 30, 30)");
 		yellowLineMaterial = new THREE.LineBasicMaterial({ color: grey, linewidth: 1.5 });
 		blueLineMaterial = new THREE.LineBasicMaterial({ color: grey, linewidth: 1.5 });
+		console.log('grey: ' + grey)
 	}  else {
 		yellowLine = new THREE.Color("rgb(184, 228, 20)");
 		yellowLineMaterial = new THREE.LineBasicMaterial({ color: yellowLine, linewidth: 1.5 });

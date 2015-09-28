@@ -122,7 +122,7 @@ io.sockets.on('connection', function (socket) {
 
 	// Send trick data to FE
 	socket.on('trick data', function(){
-		trickData = $data.slice(-250);
+		trickData = $data.slice(-150);
 		socket.emit('new trick data', trickData);
 	})
 

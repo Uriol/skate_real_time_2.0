@@ -14,7 +14,9 @@ var prev_skateboard_tail, prev_skateboard_center, prev_skateboard_nose;
 
 var position_tail, position_center, position_nose;
 
+var onGround_bool = false;
 var reception = false;
+ var trick_animation = false;
 
 // Color
 var grey_gradient_before_jump, grey_value_before_jump = 0, total_grey = 40;
@@ -46,10 +48,20 @@ function drawTrick(){
 	grey_gradient_before_jump = total_grey/before_jump;
 	grey_gradient_before_jump = grey_gradient_before_jump.toFixed(0);
 	grey_gradient_before_jump = parseInt(grey_gradient_before_jump);
+	if (grey_gradient_before_jump <= 0 ){
+		grey_gradient_before_jump = 1;
+	}
+	console.log('grey_gradient_before_jump: ' + grey_gradient_before_jump);
+
 	// Grey color after jump
-	grey_gradient_after_jump = total_grey/after_jump;
-	grey_gradient_after_jump = grey_gradient_after_jump.toFixed(0);
-	grey_gradient_after_jump = parseInt(grey_gradient_after_jump);
+	// grey_gradient_after_jump = total_grey/after_jump;
+	// grey_gradient_after_jump = grey_gradient_after_jump.toFixed(0);
+	// grey_gradient_after_jump = parseInt(grey_gradient_after_jump);
+	// if (grey_gradient_after_jump <= 0 ){
+	 	grey_gradient_after_jump = 1;
+	// }
+
+	console.log('grey_gradient_after_jump: ' + grey_gradient_after_jump);
 
 
 	// Start animation
@@ -64,14 +76,25 @@ function drawTrick(){
 		trick_animation = true;
 		i++
 
+		// console.log('onGround_bool: ' + onGround_bool);
+		// console.log('reception: ' + reception);
+
 		// Get color
 		if($color_state[i] == 'before jump'){
 			grey_value_before_jump += grey_gradient_before_jump;
+			console.log('grey_value_before_jump: ' + grey_value_before_jump);
 			darkGrey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
 			grey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
+			//darkGrey = new THREE.Color("rgb(250, 0, 0)");
+			//grey = new THREE.Color("rgb(184, 228, 20)");
 		} else if( $color_state[i] == 'after jump'){
 			grey_value_after_jump -= grey_gradient_after_jump;
+			if (grey_value_after_jump < 0) { grey_value_after_jump = 0;}
+			console.log('grey_value_after_jump: ' + grey_value_after_jump);
+			// edge color
+			//darkGrey = new THREE.Color("rgb(250, 0, 0)");
 			darkGrey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
+			// lines color
 			grey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
 		}
 
@@ -86,6 +109,10 @@ function drawTrick(){
 		if($state[i] == 'air'){
 			onGround_bool = false;
 		} else { onGround_bool = true; }
+
+		// if ($reception[i] === 1) {
+		// 	reception = true;
+		// } else { reception = false; }
 
 
 		// Calculate x pos increment
