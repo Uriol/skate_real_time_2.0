@@ -20,17 +20,16 @@ var reception = false;
 
 // Color
 var grey_gradient_before_jump, grey_value_before_jump = 0, total_grey = 40;
-var grey_gradient_after_jump, grey_value_after_jump = 40;
+var grey_gradient_after_jump, grey_value_after_jump;
 
 var animationInterval;
 
+var start_trick_at, finish_trick_at;
 
 function drawTrick(){
- 
- 	// console.log('centerYposition: ' + centerYposition);
- 	// if (centerYposition == undefined){
- 	// 	console.log('no jump');
- 	// }
+ 	
+ 	start_trick_at = 0;
+ 	finish_trick_at = 0;
 
 	// Reset values
 	position_tail = new THREE.Vector3(); 
@@ -47,60 +46,57 @@ function drawTrick(){
 
 	// Restart color values
 	grey_value_before_jump = 0;
-	grey_value_after_jump = 40;
+	grey_value_after_jump = 60;
 	yellow_value_during_jump = 0;
 
-	// Grey color before Jump
-	grey_gradient_before_jump = total_grey/before_jump;
-	grey_gradient_before_jump = grey_gradient_before_jump.toFixed(0);
-	grey_gradient_before_jump = parseInt(grey_gradient_before_jump);
-	if (grey_gradient_before_jump <= 0 ){
-		grey_gradient_before_jump = 1;
+	console.log('jump on draw trick: ' + jump);
+	if (jump == true){
+		console.log('skates before jump: ' + before_jump);
+		console.log('skates after jump: ' + after_jump);
 	}
-	console.log('grey_gradient_before_jump: ' + grey_gradient_before_jump);
-
-	// Grey color after jump
-	// grey_gradient_after_jump = total_grey/after_jump;
-	// grey_gradient_after_jump = grey_gradient_after_jump.toFixed(0);
-	// grey_gradient_after_jump = parseInt(grey_gradient_after_jump);
-	// if (grey_gradient_after_jump <= 0 ){
-	 	grey_gradient_after_jump = 1;
-	// }
-
-	console.log('grey_gradient_after_jump: ' + grey_gradient_after_jump);
 
 
-	// Start animation
-	var i = 0;
+	// When to start the trick
+	if (before_jump >= 20 && jump == true){
+		start_trick_at = before_jump-20;
+	} else {
+		start_trick_at = 0;
+	}
+	console.log('start trick: ' + start_trick_at)
+	// When to finish the trick
+	if (after_jump >= 20 && jump == true){
+		finish_trick_at = after_jump-20;
+	} else {
+		finish_trick_at = 0;
+	}
+
+	// Decrease / increase the grey value
+	grey_gradient_before_jump = 3;
+	grey_gradient_after_jump = 3;
+
+	// Start animation 
+	// 20 skates before/after
+	var i = start_trick_at;
 	animationInterval = setInterval(function(){
 		// Clear interval at last position
-		if($total_x_positions.length == i) {
+		if(($total_x_positions.length-finish_trick_at) == i) {
 			trick_animation = false;
 			clearInterval(animationInterval);
 		}
 
 		trick_animation = true;
 		i++
-
-		// console.log('onGround_bool: ' + onGround_bool);
-		// console.log('reception: ' + reception);
-
+		
 		// Get color
 		if($color_state[i] == 'before jump'){
 			grey_value_before_jump += grey_gradient_before_jump;
-			//console.log('grey_value_before_jump: ' + grey_value_before_jump);
 			darkGrey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
 			grey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
-			//darkGrey = new THREE.Color("rgb(250, 0, 0)");
-			//grey = new THREE.Color("rgb(184, 228, 20)");
 		} else if( $color_state[i] == 'after jump'){
 			grey_value_after_jump -= grey_gradient_after_jump;
 			if (grey_value_after_jump < 0) { grey_value_after_jump = 0;}
-			//console.log('grey_value_after_jump: ' + grey_value_after_jump);
-			// edge color
-			//darkGrey = new THREE.Color("rgb(250, 0, 0)");
+			console.log('grey_value_after_jump: ' + grey_value_after_jump);
 			darkGrey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
-			// lines color
 			grey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
 		}
 
@@ -116,10 +112,8 @@ function drawTrick(){
 			onGround_bool = false;
 		} else { onGround_bool = true; }
 
-		// if ($reception[i] === 1) {
-		// 	reception = true;
-		// } else { reception = false; }
-
+		
+		// Correct center position in case there is no jump
 		if (centerYposition == undefined){
 			centerYposition = -200;
 		}

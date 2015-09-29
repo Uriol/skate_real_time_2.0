@@ -226,3 +226,8 @@ function render(){
 	animateParticles()
 	renderer.render(scene, camera);
 }
+
+
+// correct grey color before jump and when no jump --> done
+// add UI --> play, trick name, sensor button (send me next trick)
+// add trick recognition intel

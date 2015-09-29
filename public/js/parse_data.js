@@ -254,12 +254,12 @@ function onGround(){
 	// Calculate x positions
 	xSpeed = totalSpeed*Math.sin(total_angle_diff);
 	xPosition = xPreviousPosition + xSpeed*time;
-	console.log('xPosition: ' + xPosition);
+	//console.log('xPosition: ' + xPosition);
 	xPreviousPosition = xPosition;
 	// Calculate y positions
 	ySpeed = totalSpeed*Math.cos(total_angle_diff);
 	yPosition = yPreviousPosition + ySpeed*time;
-	console.log('yPosition: ' + yPosition);
+	//console.log('yPosition: ' + yPosition);
 	yPreviousPosition = yPosition;
 
 	// Update z: is always 0 on ground
@@ -302,7 +302,8 @@ function onAir(){
 		//$reception.push(1);
 	} else {
 		//$reception.push(0);
-		$color_state.push('before jump');
+		//$color_state.push('before jump');
+		$color_state.push('jumping');
 		during_jump += 1;
 	}
 
