@@ -64,7 +64,7 @@ $(function(){
 	}
 	socket.on('sensor ON', function(){
 		console.log('sensor is ON');
-		$('#newTrick').css('background-color', 'green');
+		//$('#newTrick').css('background-color', 'green');
 	});
 	socket.on('sensor OFF', function(){
 		askSensor();

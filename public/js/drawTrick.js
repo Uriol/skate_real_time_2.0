@@ -46,7 +46,7 @@ function drawTrick(){
 
 	// Restart color values
 	grey_value_before_jump = 0;
-	grey_value_after_jump = 60;
+	grey_value_after_jump = 80;
 	yellow_value_during_jump = 0;
 
 	console.log('jump on draw trick: ' + jump);
@@ -71,8 +71,8 @@ function drawTrick(){
 	}
 
 	// Decrease / increase the grey value
-	grey_gradient_before_jump = 3;
-	grey_gradient_after_jump = 3;
+	grey_gradient_before_jump = 4;
+	grey_gradient_after_jump = 4;
 
 	// Start animation 
 	// 20 skates before/after

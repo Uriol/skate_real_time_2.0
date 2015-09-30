@@ -229,5 +229,6 @@ function render(){
 
 
 // correct grey color before jump and when no jump --> done
+// add play function
 // add UI --> play, trick name, sensor button (send me next trick)
 // add trick recognition intel
