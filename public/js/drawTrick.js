@@ -28,6 +28,9 @@ var start_trick_at, finish_trick_at;
 
 function drawTrick(){
  	
+	trick_displayed = true;
+	$('#playTrick').show();
+
  	start_trick_at = 0;
  	finish_trick_at = 0;
 
@@ -49,7 +52,7 @@ function drawTrick(){
 	grey_value_after_jump = 80;
 	yellow_value_during_jump = 0;
 
-	console.log('jump on draw trick: ' + jump);
+	//console.log('jump on draw trick: ' + jump);
 	if (jump == true){
 		console.log('skates before jump: ' + before_jump);
 		console.log('skates after jump: ' + after_jump);
@@ -62,7 +65,7 @@ function drawTrick(){
 	} else {
 		start_trick_at = 0;
 	}
-	console.log('start trick: ' + start_trick_at)
+	//console.log('start trick: ' + start_trick_at)
 	// When to finish the trick
 	if (after_jump >= 20 && jump == true){
 		finish_trick_at = after_jump-20;
@@ -95,7 +98,7 @@ function drawTrick(){
 		} else if( $color_state[i] == 'after jump'){
 			grey_value_after_jump -= grey_gradient_after_jump;
 			if (grey_value_after_jump < 0) { grey_value_after_jump = 0;}
-			console.log('grey_value_after_jump: ' + grey_value_after_jump);
+			//console.log('grey_value_after_jump: ' + grey_value_after_jump);
 			darkGrey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
 			grey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
 		}

@@ -54,6 +54,9 @@ var before_jump = 0,
 
 //var $reception = [];
 var jump = false;
+var trick_displayed = false;
+
+var trickData = [];
 
 $(function(){
 
@@ -79,12 +82,18 @@ $(function(){
 	})
 	// Recieve new trick data
 	socket.on('new trick data', function(trickdata){
+		
+		//console.log(trickdata);
+		trickData = trickdata;
+
 		resetVisuals();
 		restartValues();
 		parseTrickData(trickdata);
 		calculateAverage();
 		switchState();
 		drawTrick();
+
+
 	})
 
 }) // End doc ready
@@ -157,6 +166,7 @@ function restartValues(){
 	jumpHeight = 0;
 
 	jump = false;
+	trick_displayed = false;
 
 
 }
@@ -198,8 +208,8 @@ function calculateAverage(){
 	// Get time on air / airSpeed
 	totalTimeOnAir = airtime*time;
 	airSpeed = 0.5*gravity*totalTimeOnAir;
-	console.log('Total time on Air: ' + totalTimeOnAir);
-	console.log('air speed: ' + airSpeed);
+	//console.log('Total time on Air: ' + totalTimeOnAir);
+	//console.log('air speed: ' + airSpeed);
 }
 
 var state;
@@ -215,7 +225,7 @@ function switchState(){
 			jump = true;
 		}
 	}
-	console.log('Jump?: ' + jump);
+	//console.log('Jump?: ' + jump);
 }
 
 // function noJump(){
@@ -325,7 +335,7 @@ function onAir(){
 		halfJump = true;
 		jumpHeight = zPosition;
 		centerYposition = yPosition*pixelMultiplier*-1;
-		console.log('jump height: ' + jumpHeight);
+		//console.log('jump height: ' + jumpHeight);
 	}
 
 	// Calculate total angle dif to rads
@@ -401,6 +411,13 @@ function resetVisuals(){
 		}
 	}
 }
+
+// Calculate trick names
+// 0llie, 180, 360, Fakie/Normal, flip, flip180, flip360
+
+
+
+
 
 // Steps to parse data
 // 0 - Restart values 
