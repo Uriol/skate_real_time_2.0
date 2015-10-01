@@ -23,7 +23,9 @@ var xSpeed, xPosition, xPreviousPosition;
 var ySpeed, yPosition, yPreviousPosition;
 var zPosition;
 // On Air
-var initialYawOnJumping, initial_y_onJumping,
+var initialYawOnJumping, 
+	initialRollOnJumping, elapsedRollOnJumping, 
+	initial_y_onJumping,
 	final_y_onJumping, jumpDistance,
 	yawOnLanding, jumpHeight,
 	previous_pitch = 0,
@@ -57,6 +59,13 @@ var jump = false;
 var trick_displayed = false;
 
 var trickData = [];
+var trickName = '';
+var halfFlip_1 = false, halfFlip_2 = false;
+
+
+// Tricks booleans
+// Fakie/Normal, 0llie, flip, 180, 360, flip180, flip360
+var fakie = false, flip = false, oneEighty = false, threeSixty = false;
 
 $(function(){
 
@@ -85,13 +94,15 @@ $(function(){
 		
 		//console.log(trickdata);
 		trickData = trickdata;
-
+		$('#trickName h1').text('');
 		resetVisuals();
 		restartValues();
 		parseTrickData(trickdata);
 		calculateAverage();
 		switchState();
 		drawTrick();
+		calculateTrickName();
+
 
 
 	})
@@ -168,7 +179,10 @@ function restartValues(){
 	jump = false;
 	trick_displayed = false;
 
+	trickName = '';
+	halfFlip_1 = false, halfFlip_2 = false;
 
+	fakie = false, flip = false, oneEighty = false, threeSixty = false;
 }
 
 // Sometimes the values between the jump incorrectly detect the skate isn't in the air
@@ -296,6 +310,7 @@ function onAir(){
 	// Detect first moment on jump
 	if (elapsedTimeOnAir == time) {
 		initialYawOnJumping = $yaw[k];
+		initialRollOnJumping = $roll[k];
 		initial_y_onJumping = yPosition;
 	}
 
@@ -316,6 +331,10 @@ function onAir(){
 		$color_state.push('jumping');
 		during_jump += 1;
 	}
+
+	
+	// Calculate tricks
+	calculateFlip();
 
 	// Calculate z position
 	zPosition = airSpeed*elapsedTimeOnAir-0.5*gravity*elapsedTimeOnAir*elapsedTimeOnAir;
@@ -348,7 +367,7 @@ function onAir(){
 	$total_z_positions.push(zPosition);
 	$total_yaws.push(total_angle_diff);
 	$total_pitchs.push($pitch[k]*-1);
-	$total_rolls.push($roll[k]*-1);
+	$total_rolls.push($roll[k]);
 
 }
 
@@ -412,12 +431,56 @@ function resetVisuals(){
 	}
 }
 
+
+// Calculate flip
+function calculateFlip(){
+	// Calculate elapsed roll
+	elapsedRollOnJumping = $roll[k] - initialRollOnJumping;
+	// Calculate each half rotation
+	if (elapsedRollOnJumping >= 140){
+		halfFlip_1 = true;
+	} else if (elapsedRollOnJumping <= -140){
+		halfFlip_2 = true;
+	}
+	// Calculate complete rotation
+	if(halfFlip_1 == true && halfFlip_2 == true){
+		flip = true;
+	}
+}
 // Calculate trick names
-// 0llie, 180, 360, Fakie/Normal, flip, flip180, flip360
+// Fakie/Normal, 0llie, flip, 180, 360, flip180, flip360
+function calculateTrickName(){
 
+	// 180
+	// if (minus180 == true || plus180 == true){
+	// 	trickName = '180'
+	// }
+	// Fakie 
+	// Flip
+	if (flip == true){
+		trickName = 'flip';
+	}
+}
 
+// Calibrate sensors
+function drawTrickName(){
+	var test1 = 'fakie';
 
+	var test3 = '180';
+	trickname = test1 + test3;
+	console.log('trickname: ' + trickName);
+	console.log('hello');
+	$('#trickName h1').text(trickName);
 
+	// look at concat()
+	// http://www.w3schools.com/jsref/jsref_concat_string.asp
+}
+
+// TRICKS
+// 1 - Fakie Ollie, Fakie 180, Fakie 360, Fakie flip, Fakie flip 180, Fakie flip 360, 
+// 2 - Ollie, 180, 360, Flip, Flip 180, Flip 360
+// To calculate 
+// - Fakie, flip, 180, 360 
 
 // Steps to parse data
 // 0 - Restart values 
@@ -428,3 +491,5 @@ function resetVisuals(){
 // 5 - Calculate average for values during jump (WIP)
 // 6 - Add total time on air and air speed
 // 7 - Switch state: when to run onAir/onGround
+
+

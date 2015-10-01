@@ -28,6 +28,7 @@ var start_trick_at, finish_trick_at;
 
 function drawTrick(){
  	
+ 	
 	trick_displayed = true;
 	$('#playTrick').show();
 
@@ -85,6 +86,7 @@ function drawTrick(){
 		if(($total_x_positions.length-finish_trick_at) == i) {
 			trick_animation = false;
 			clearInterval(animationInterval);
+			drawTrickName();
 		}
 
 		trick_animation = true;
