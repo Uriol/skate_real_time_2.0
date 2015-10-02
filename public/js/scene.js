@@ -107,7 +107,7 @@ function drawBackground(){
 
 function drawParticles(){
 
-	var total_particles_1 = 120, total_particles_2 = 120, total_particles_3 = 120, total_fogs = 250;
+	var total_particles_1 = 120, total_particles_2 = 120, total_particles_3 = 120, total_fogs = 400;
 
 	// Create particles geometries
 	var particle_1_geometry = new THREE.Geometry(),

@@ -471,9 +471,9 @@ function calculateTrickName(){
 	// trick_stance, trickFlip, trickRotation;
 	// Fakie
 	if (fakie == true){
-		trick_stance = 'FAKIE ';
-	} else {
 		trick_stance = '';
+	} else {
+		trick_stance = 'FAKIE ';
 	}
 	// 180
 	if(oneEighty == true){
@@ -485,7 +485,7 @@ function calculateTrickName(){
 	if (flip == true){
 		trickFlip = 'FLIP'
 	} else {
-		trickFlip = '';
+		trickFlip = 'OLLIE';
 	}
 	
 	
