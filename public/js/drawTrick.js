@@ -89,7 +89,7 @@ function drawTrick(){
 			if(jump == true){
 				drawTrickName();
 			} else {
-				$('#trickName h1').text('');
+				$('#trickName h1').text('trickName_final');
 			}
 		}
 

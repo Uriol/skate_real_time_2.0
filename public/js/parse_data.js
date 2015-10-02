@@ -203,8 +203,8 @@ function calculateAverage(){
 		// } else {
 		// 	slice_start = 0;
 		// }
-		// slice_start = j >= slice_num/2 ? j-slice_num/2 : 0;
-		slice_start = j;
+		slice_start = j >= slice_num/2 ? j-slice_num/2 : 0;
+		//slice_start = j;
 		//console.log('slice_start: ' + slice_start );
 		// Get a chunk to calculate average
 		sliced = $air_ground.slice(slice_start, slice_start + slice_num);
@@ -366,7 +366,7 @@ function onAir(){
 	$total_y_positions.push(yPosition);
 	$total_z_positions.push(zPosition);
 	$total_yaws.push(total_angle_diff);
-	$total_pitchs.push($pitch[k]);
+	$total_pitchs.push($pitch[k]*-1);
 	$total_rolls.push($roll[k]);
 
 	previous_pitch = $pitch[k]
