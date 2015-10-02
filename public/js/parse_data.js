@@ -29,6 +29,7 @@ var initialYawOnJumping,
 	final_y_onJumping, jumpDistance,
 	yawOnLanding, jumpHeight,
 	previous_pitch = 0,
+	pitch_add,
 	centerYposition;
 // Physics
 var airtime,
@@ -63,9 +64,12 @@ var trickName = '';
 var halfFlip_1 = false, halfFlip_2 = false;
 
 
+
 // Tricks booleans
 // Fakie/Normal, 0llie, flip, 180, 360, flip180, flip360
 var fakie = false, flip = false, oneEighty = false, threeSixty = false;
+
+var trick_stance, trickFlip, trickRotation;
 
 $(function(){
 
@@ -169,6 +173,8 @@ function restartValues(){
 	$total_pitchs = [];
 	$total_rolls = [];
 
+	previous_pitch = 0;
+	pitch_add = 0;
 	// Air
 	airtime = 0,
 	totalTimeOnAir = 0;
@@ -183,6 +189,7 @@ function restartValues(){
 	halfFlip_1 = false, halfFlip_2 = false;
 
 	fakie = false, flip = false, oneEighty = false, threeSixty = false;
+	trick_stance, trickFlip, trickRotation;
 }
 
 // Sometimes the values between the jump incorrectly detect the skate isn't in the air
@@ -216,8 +223,6 @@ function calculateAverage(){
 			$state.push('ground');
 		}
 	}
-	// console.log('$air_ground: ' + $air_ground);
-	// console.log('$state: ' + $state);
 
 	// Get time on air / airSpeed
 	totalTimeOnAir = airtime*time;
@@ -239,16 +244,7 @@ function switchState(){
 			jump = true;
 		}
 	}
-	//console.log('Jump?: ' + jump);
 }
-
-// function noJump(){
-// 	for(var j = 0; j < $state.length; j++){
-// 		state = $state[k];
-// 		if 
-// 	}
-// }
-
 
 // Calculate position when skate is on ground
 function onGround(){
@@ -299,8 +295,6 @@ function onGround(){
 	$total_y_positions.push(yPosition);
 	$total_z_positions.push(zPosition);
 
-	//$reception.push(0);
-
 }
 
 function onAir(){
@@ -324,21 +318,27 @@ function onAir(){
 		jump_ended = true;
 		$color_state.push('after jump');
 		after_jump += 1;
-		//$reception.push(1);
+		
+		// Calculate pitch
+		calculatePitch();
+		// 180
+		calculate180();
 	} else {
-		//$reception.push(0);
-		//$color_state.push('before jump');
 		$color_state.push('jumping');
 		during_jump += 1;
 	}
 
+
+	// Calculate pitches at the beginning of the jump
+	if(air_interval < 7){
+		pitch_add = previous_pitch + $pitch[k];
+	} 
 	
 	// Calculate tricks
 	calculateFlip();
 
 	// Calculate z position
 	zPosition = airSpeed*elapsedTimeOnAir-0.5*gravity*elapsedTimeOnAir*elapsedTimeOnAir;
-	//console.log('z position: ' + zPosition);
 	// Calculate x position: keeps constant
 	xPosition = xPreviousPosition + xSpeed*time;
 	xPreviousPosition = xPosition;
@@ -366,8 +366,10 @@ function onAir(){
 	$total_y_positions.push(yPosition);
 	$total_z_positions.push(zPosition);
 	$total_yaws.push(total_angle_diff);
-	$total_pitchs.push($pitch[k]*-1);
+	$total_pitchs.push($pitch[k]);
 	$total_rolls.push($roll[k]);
+
+	previous_pitch = $pitch[k]
 
 }
 
@@ -431,6 +433,15 @@ function resetVisuals(){
 	}
 }
 
+// Calculate fakie 
+// fakie = positive pitch
+function calculatePitch(){
+	if(pitch_add >= 0){
+		fakie = true;
+	} else {
+		fakie = false;
+	}
+}
 
 // Calculate flip
 function calculateFlip(){
@@ -447,33 +458,45 @@ function calculateFlip(){
 		flip = true;
 	}
 }
-// Calculate trick names
-// Fakie/Normal, 0llie, flip, 180, 360, flip180, flip360
-function calculateTrickName(){
+// 180
+function calculate180(){
+	if(minus180 == true || plus180 == true){
+		oneEighty = true;
+	}
+}
 
+// Calculate trick names
+// Fakie/Normal, 0llie, 180, 360, flip, flip 180, flip360
+function calculateTrickName(){
+	// trick_stance, trickFlip, trickRotation;
+	// Fakie
+	if (fakie == true){
+		trick_stance = 'FAKIE ';
+	} else {
+		trick_stance = '';
+	}
 	// 180
-	// if (minus180 == true || plus180 == true){
-	// 	trickName = '180'
-	// }
-	// Fakie 
+	if(oneEighty == true){
+		trickRotation = '180 '
+	} else {
+		trickRotation = '';
+	}
 	// Flip
 	if (flip == true){
-		trickName = 'flip';
+		trickFlip = 'FLIP'
+	} else {
+		trickFlip = '';
 	}
+	
+	
 }
 
 // Calibrate sensors
 function drawTrickName(){
-	var test1 = 'fakie';
-
-	var test3 = '180';
-	trickname = test1 + test3;
-	console.log('trickname: ' + trickName);
-	console.log('hello');
-	$('#trickName h1').text(trickName);
-
-	// look at concat()
-	// http://www.w3schools.com/jsref/jsref_concat_string.asp
+	
+	var trickName_1 = trick_stance.concat(trickRotation);
+	var trickName_final = trickName_1.concat(trickFlip);
+	$('#trickName h1').text(trickName_final);
 }
 
 // TRICKS
