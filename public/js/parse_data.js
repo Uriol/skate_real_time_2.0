@@ -471,9 +471,9 @@ function calculateTrickName(){
 	// trick_stance, trickFlip, trickRotation;
 	// Fakie
 	if (fakie == true){
-		trick_stance = '';
-	} else {
 		trick_stance = 'FAKIE ';
+	} else {
+		trick_stance = '';
 	}
 	// 180
 	if(oneEighty == true){
@@ -497,6 +497,7 @@ function drawTrickName(){
 	var trickName_1 = trick_stance.concat(trickRotation);
 	var trickName_final = trickName_1.concat(trickFlip);
 	$('#trickName h1').text(trickName_final);
+	
 }
 
 // TRICKS

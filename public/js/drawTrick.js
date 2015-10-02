@@ -89,7 +89,7 @@ function drawTrick(){
 			if(jump == true){
 				drawTrickName();
 			} else {
-				$('#trickName h1').text('trickName_final');
+				$('#trickName h1').text('');
 			}
 		}
 
@@ -132,7 +132,8 @@ function drawTrick(){
 		increment_x_position = actual_x_position - previous_x_position;
 		//console.log('increment xpos: ' + increment_x_position);
 		// Caclculate y pos increment
-		actual_y_position = this_z_position*pixelMultiplier-20;
+		//actual_y_position = this_z_position*pixelMultiplier-20;
+		actual_y_position = this_z_position*pixelMultiplier+3;
 		increment_y_position = actual_y_position - previous_y_position;
 		// Calculate z pos increment
 		actual_z_position = this_x_position*pixelMultiplier;
