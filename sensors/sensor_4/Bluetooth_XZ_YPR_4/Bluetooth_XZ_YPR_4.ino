@@ -63,12 +63,12 @@ boolean output_errors = false;  // true or false
 // Put MIN/MAX and OFFSET readings for your board here!
 // Accelerometer
 // "accel x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
-#define ACCEL_X_MIN ((float) -261)  // -262, -261, 
-#define ACCEL_X_MAX ((float) 250) // 253, 249, 255, 250, 
-#define ACCEL_Y_MIN ((float) -251) // -251, 251, 
-#define ACCEL_Y_MAX ((float) 272)  //275, 269,272, 271,272
-#define ACCEL_Z_MIN ((float) -245)  //
-#define ACCEL_Z_MAX ((float) 251)  // 
+#define ACCEL_X_MIN ((float) -254)
+#define ACCEL_X_MAX ((float) 258)
+#define ACCEL_Y_MIN ((float) -252)
+#define ACCEL_Y_MAX ((float) 265)
+#define ACCEL_Z_MIN ((float) -227)
+#define ACCEL_Z_MAX ((float) 232) 
 
 // Magnetometer (standard calibration mode)
 // "magn x,y,z (min/max) = X_MIN/X_MAX  Y_MIN/Y_MAX  Z_MIN/Z_MAX"
@@ -85,13 +85,16 @@ boolean output_errors = false;  // true or false
 //const float magn_ellipsoid_center[3] = {29.6772, 250.262, -17.7117};
 //const float magn_ellipsoid_transform[3][3] = {{0.889256, 0.000807715, -0.0243454}, {0.000807715, 0.941979, -0.00975540}, {-0.0243454, -0.00975540, 0.992947}};
 #define CALIBRATION__MAGN_USE_EXTENDED true
-const float magn_ellipsoid_center[3] = {69.0168, 148.441, -63.7616};
-const float magn_ellipsoid_transform[3][3] = {{0.887121, 0.00404592, -0.0370942}, {0.00404592, 0.932897, -0.00899605}, {-0.0370942, -0.00899605, 0.986218}};
+const float magn_ellipsoid_center[3] = {-104.828, 170.092, 123.323};
+const float magn_ellipsoid_transform[3][3] = {{0.874634, -0.0116772, -0.0109296}, {-0.0116772, 0.904187, -0.00352141}, {-0.0109296, -0.00352141, 0.998981}};
+
+
+
 // Gyroscope
 // "gyro x,y,z (current/average) = .../OFFSET_X  .../OFFSET_Y  .../OFFSET_Z
-#define GYRO_AVERAGE_OFFSET_X ((float) -29) // -29
-#define GYRO_AVERAGE_OFFSET_Y ((float) -11) // -11
-#define GYRO_AVERAGE_OFFSET_Z ((float) -12) // 12
+#define GYRO_AVERAGE_OFFSET_X ((float) -12.40)
+#define GYRO_AVERAGE_OFFSET_Y ((float) -31.22)
+#define GYRO_AVERAGE_OFFSET_Z ((float) 5.49)
 
 
 // -----------------------------------------------------------------------------------------------------------------------------------

@@ -102,6 +102,7 @@ $(function(){
 		resetVisuals();
 		restartValues();
 		parseTrickData(trickdata);
+		console.log($z_Accel);
 		calculateAverage();
 		switchState();
 		drawTrick();
@@ -137,6 +138,8 @@ function parseTrickData(data){
 		$yaw.push(data_row[2]);
 		$pitch.push(data_row[3]);
 		$roll.push(data_row[4]);
+
+
 	}
 
 	//console.log($roll);
@@ -165,6 +168,9 @@ function restartValues(){
 	minus180 = false,
 	plus180 = false,
 	halfJump = false;
+
+	elapsedTimeOnAir = 0;
+	airSpeed = 0;
 
 	$total_x_positions = [];
 	$total_y_positions = [];
