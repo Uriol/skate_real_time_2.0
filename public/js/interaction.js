@@ -10,9 +10,10 @@ $(function(){
 			console.log('trick displayed');
 			// Reset everything
 			resetVisuals();
-			restartValues();
+			resetValues();
 			parseTrickData(trickData);
 			calculateAverage();
+			checkNumberOfJumps();
 			switchState();
 			drawTrick();
 		}

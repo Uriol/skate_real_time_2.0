@@ -16,7 +16,16 @@ var onGround_bool = false,
 
 var animationInterval;
 
+// Color
+var grey_gradient_before_jump, grey_value_before_jump = 0, total_grey = 40;
+var grey_gradient_after_jump, grey_value_after_jump;
+
+var start_trick_at, finish_trick_at;
+
 function drawTrick(){
+
+	trick_displayed = true;
+	$('#playTrick').show();
 
 	// Reset values
 	position_tail = new THREE.Vector3(); 
@@ -31,19 +40,65 @@ function drawTrick(){
 	previous_y_pos = 0;
 	previous_z_pos = 0;
 
+	start_trick_at = 0, finish_trick_at = 0;
+
+	// Restart color values
+	grey_value_before_jump = 0;
+	grey_value_after_jump = 80;
+	// yellow_value_during_jump = 0;
+
+	console.log('before_jump: ' + before_jump);
+	console.log('jump: ' + jump)
+	// When to start the trick
+	if (before_jump >= 20 && jump == true){
+		start_trick_at = before_jump-20;
+	} else {
+		start_trick_at = 0;
+	}
+	// When to finish the trick
+	if (after_jump >= 20 && jump == true){
+		finish_trick_at = after_jump-20;
+	} else {
+		finish_trick_at = 0;
+	}
+
+	// Decrease / increase the grey value
+	grey_gradient_before_jump = 4;
+	grey_gradient_after_jump = 4;
+
 	// Start animation
-	var i = 0;
+	// 20 skates before/after
+	var i = start_trick_at;
+	console.log(i)
 	animationInterval = setInterval(function(){
 
 		// Clear interval when trick is done
-		if($total_x_positions.length == i){
+		if(($total_x_positions.length-finish_trick_at) == i){
 
 			trick_animation = false;
 			clearInterval(animationInterval);
+			if (jump == true){
+				drawTrickName();
+			} else {
+				$('#trickName h1').text('');
+			}
 		}
 		
 		trick_animation = true;
 		i++;
+
+		// Get color
+		if($color_state[i] == 'before jump'){
+			grey_value_before_jump += grey_gradient_before_jump;
+			darkGrey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
+			grey = new THREE.Color('rgb(' + grey_value_before_jump + ', ' + grey_value_before_jump + ', ' + grey_value_before_jump +')');
+		} else if( $color_state[i] == 'after jump'){
+			grey_value_after_jump -= grey_gradient_after_jump;
+			if (grey_value_after_jump < 0) { grey_value_after_jump = 0;}
+			//console.log('grey_value_after_jump: ' + grey_value_after_jump);
+			darkGrey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
+			grey = new THREE.Color('rgb(' + grey_value_after_jump + ', ' + grey_value_after_jump + ', ' + grey_value_after_jump +')');
+		}
 
 		this_x_pos = $total_x_positions[i];
 		this_y_pos = $total_y_positions[i];
@@ -52,9 +107,17 @@ function drawTrick(){
 		$total_rolls[i] = $total_rolls[i]*pi/180;
 		$total_pitchs[i] = $total_pitchs[i]*pi/180;
 
-		// don't worry about color/y center now
-		onGround_bool = false;
-		centerYposition = -200;
+		
+		// Don't draw the first one as jumping
+		if($state[i] == 'air'){
+			onGround_bool = false;
+		} else { onGround_bool = true; }
+
+		
+		// Correct center position in case there is no jump
+		if (centerYposition == undefined){
+			centerYposition = -200;
+		}
 
 		// Calculate pos increments
 		actual_x_pos = (this_y_pos*pixelMultiplier)-centerYposition*-1;
@@ -63,6 +126,8 @@ function drawTrick(){
 		increment_y_pos = actual_y_pos - previous_y_pos;
 		actual_z_pos = this_x_pos*pixelMultiplier;
 		increment_z_pos = actual_z_pos - previous_z_pos;
+
+		//console.log('z pos: ' + actual_z_pos);
 
 		// Detect center of rotation
 		if(previous_pitch > $total_pitchs[i]){
@@ -80,6 +145,7 @@ function drawTrick(){
 
 			final_z_pos = prev_skateboard_nose.z + increment_z_pos;
 			skateboard.position.z = final_z_pos;
+			//console.log('nose Previous pitch: ' + previous_pitch + ', nose actual pitch: ' + $total_pitchs[i])
 		
 		} else if (previous_pitch < $total_pitchs[i]) {
 			drawSkateboard_tail()
@@ -96,7 +162,7 @@ function drawTrick(){
 
 			final_z_pos = prev_skateboard_tail.z + increment_z_pos;
 			skateboard.position.z = final_z_pos;
-		
+			//console.log('tail Previous pitch: ' + previous_pitch + ', tail actual pitch: ' + $total_pitchs[i])
 		} else {
 
 			drawSkateboard_center();
@@ -113,6 +179,7 @@ function drawTrick(){
 
 			final_z_pos = prev_skateboard_center.z + increment_z_pos;
 			skateboard.position.z = final_z_pos;
+			//console.log('center Previous pitch: ' + previous_pitch + ', center actual pitch: ' + $total_pitchs[i])
 		}
 
 		// 	Save actual position
@@ -143,8 +210,10 @@ function drawTrick(){
 		prev_skateboard_center = position_center;
 		prev_skateboard_nose = position_nose;
 
-		console.log('drawing trick')
+
 
 	}, 20);
 }
 
+
+// 180 not working

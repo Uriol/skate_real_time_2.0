@@ -264,9 +264,12 @@ boolean output_errors = false;  // true or false
 //#define CALIBRATION__MAGN_USE_EXTENDED true
 //const float magn_ellipsoid_center[3] = {-112.544, 167.741, 111.097};
 //const float magn_ellipsoid_transform[3][3] = {{0.886278, -0.0129726, -0.0129767}, {-0.0129726, 0.907572, -0.00624576}, {-0.0129767, -0.00624576, 0.998270}};
+//#define CALIBRATION__MAGN_USE_EXTENDED true
+//const float magn_ellipsoid_center[3] = {-104.828, 170.092, 123.323};
+//const float magn_ellipsoid_transform[3][3] = {{0.874634, -0.0116772, -0.0109296}, {-0.0116772, 0.904187, -0.00352141}, {-0.0109296, -0.00352141, 0.998981}};
 #define CALIBRATION__MAGN_USE_EXTENDED true
-const float magn_ellipsoid_center[3] = {-104.828, 170.092, 123.323};
-const float magn_ellipsoid_transform[3][3] = {{0.874634, -0.0116772, -0.0109296}, {-0.0116772, 0.904187, -0.00352141}, {-0.0109296, -0.00352141, 0.998981}};
+const float magn_ellipsoid_center[3] = {308.185, 21.0414, -99.8733};
+const float magn_ellipsoid_transform[3][3] = {{0.890038, -0.0109357, -0.00526747}, {-0.0109357, 0.922192, -0.00836998}, {-0.00526747, -0.00836998, 0.998945}};
 
 // Extended magn (with Sennheiser HD 485 headphones)
 //#define CALIBRATION__MAGN_USE_EXTENDED true

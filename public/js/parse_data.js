@@ -26,13 +26,14 @@ var airtime,
 	$jumps_speeds = [],
 	air_interval,
 	elapsedTimeOnAir,
-	initialYawOnJumping,
+	initialYawOnJumping = 0,
 	initialRollOnJumping,
 	initial_y_onJumping,
 	final_y_onJumping,
 	jumpDistance,
 	jump_counter = 0,
 	yawOnLanding;
+	previous_pitch = 0;
 
 // Angles and positions
 var initialYaw, total_angle_diff,
@@ -43,7 +44,12 @@ var initialYaw, total_angle_diff,
 
 // Booleans
 var plus180 = false,
-	minus180 = false;
+	minus180 = false,
+	jump = false,
+	jump_ended = false;
+	more_than_one_jump = false,
+	halfJump = false,
+	trick_displayed = false;
 
 // Position arrays
 var $total_yaws = [],
@@ -53,8 +59,24 @@ var $total_yaws = [],
 	$total_y_positions = [],
 	$total_z_positions = [];
 
-// Color arrays
-var $color_state = [];
+// Modify color 
+var $color_state = [],
+	before_jump = 0,
+	after_jump = 0,
+	during_jump = 0;
+
+// Tricks booleans
+var halfFlip_1 = false, halfFlip_2 = false,
+	fakie = false, 
+	flip = false,
+	oneEighty = false;
+
+var previous_pitch_fakie = 0,
+	pitch_add,
+	initialRollOnJumping, elapsedRollOnJumping;
+
+var trick_stance, trickFlip, trickRotation;
+
 
 $(function(){
 
@@ -86,7 +108,12 @@ $(function(){
 		calculateAverage();
 		checkNumberOfJumps();
 		switchState();
-		drawTrick();
+		if (more_than_one_jump == false){
+			drawTrick();
+			calculateTrickName();
+		} else {
+			alert('Too many jumps detected');
+		}
 	})
 
 }) // End of doc ready
@@ -149,6 +176,9 @@ function checkNumberOfJumps(){
 			$jumps_speeds.push(jump_speed);
 			jump_airtime = 0;
 			totalTimeOnAir = 0;
+			if (totalJumps >= 2){
+				more_than_one_jump = true;
+			}
 		}
 
 		if ($state[k] == 'air'){
@@ -156,8 +186,8 @@ function checkNumberOfJumps(){
 		}
 	}
 
-	// console.log('total jumps: ' + totalJumps);
-	// console.log('airtime in jumps: ' + $jumps_airtime);
+	//console.log('total jumps: ' + totalJumps);
+	//console.log('airtime in jumps: ' + $jumps_airtime);
 	// console.log('jumps speeds: ' + $jumps_speeds);
 }
 
@@ -170,6 +200,7 @@ function switchState(){
 			onGround();
 		} else {
 			onAir();
+			jump = true;
 		}
 	}
 }
@@ -177,9 +208,20 @@ function switchState(){
 // Calculate position when skate is on the ground
 function onGround(){
 
+	// Push color (grey) state to array
+	if( jump_ended == false){
+		before_jump += 1;
+		$color_state.push('before jump');
+	} else {
+		after_jump += 1;
+		$color_state.push('after jump');
+	}
+
+
 	air_interval = 0;
 	elapsedTimeOnAir = 0;
 	initialYaw = $yaw[0];
+
 
 	// If 180
 	if (plus180 == true) { $yaw[k] = $yaw[k]+180; }
@@ -218,21 +260,48 @@ function onAir(){
 
 	// Detect first moment of jump
 	if (elapsedTimeOnAir == time){
-		initialYawOnJumping == $yaw[k];
+		initialYawOnJumping = $yaw[k];
 		initialRollOnJumping = $roll[k];
 		initial_y_onJumping = yPosition;
 		jump_counter += 1;
+		//console.log($jumps_airtime[jump_counter-1])
 	}
+	
 	// Detect landing moment
 	if (elapsedTimeOnAir == $jumps_airtime[jump_counter-1]){
+
 		yawOnLanding = $yaw[k];
 		calculateLanding();
+
 		// Add color
+		jump_ended = true;
+		after_jump += 1;
 		$color_state.push('after jump');
 
+		// Calculate tricks
+		calculatePitch();
+		calculate180();
+
 	} else {
+		during_jump += 1;
 		$color_state.push('jumping');
 	}
+
+	// Calculate jump height and center y position
+	// Detect middle of the jump
+	if (elapsedTimeOnAir >= $jumps_airtime[jump_counter-1]/2 && halfJump == false){
+		halfJump = true;
+		centerYposition = yPosition*pixelMultiplier*-1;
+		console.log('centerYposition: ' + centerYposition);
+	}
+
+	// Calculate pitches at the beginning of the jump
+	// For fakie / normal
+	if (air_interval < 7){
+		pitch_add = previous_pitch_fakie + $pitch[k];
+	}
+	// Calculate flip
+	calculateFlip();
 
 	// Calculate positions
 	zPosition = $jumps_speeds[jump_counter-1]*elapsedTimeOnAir-0.5*gravity*elapsedTimeOnAir*elapsedTimeOnAir;
@@ -254,13 +323,15 @@ function onAir(){
 	$total_rolls.push($roll[k]);
 
 	//console.log('z position: ' + zPosition);
-	previous_pitch = $pitch[k];
+	previous_pitch_fakie = $pitch[k];
 
 
 }
 
 // Calculate new direction if there is a 180
 function calculateLanding(){
+
+
 	// Calculate 180s
 	// first case initialYaw < 0 > 90
 	if ( initialYawOnJumping > 0 && initialYawOnJumping < 90 ) {
@@ -303,6 +374,40 @@ function calculateLanding(){
   	}
 }
 
+// Calculate tricks -------------------------------------------
+// Fakie 
+function calculatePitch(){
+	if(pitch_add >= 0){
+		fakie = true;
+	} else {
+		fakie = false;
+	}
+}
+
+// Calculate flip
+function calculateFlip(){
+	// Calculate elapsed roll
+	elapsedRollOnJumping = $roll[k] - initialRollOnJumping;
+	// Calculate each half rotation
+	if (elapsedRollOnJumping >= 140){
+		halfFlip_1 = true;
+	} else if (elapsedRollOnJumping <= -140){
+		halfFlip_2 = true;
+	}
+	// Calculate complete rotation
+	if (halfFlip_1 == true && halfFlip_2 == true){
+		flip = true;
+	}
+
+}
+
+// 180
+function calculate180(){
+	if (minus180 == true || plus180 == true){
+		oneEighty = true;
+	}
+}
+
 // Delete skate objects
 function resetVisuals(){
 	if (trick_animation == true) {
@@ -320,6 +425,36 @@ function resetVisuals(){
 	}
 }
 
+// Calculate trick names
+// Fakie/Normal, 0llie, 180, 360, flip, flip 180, flip360
+function calculateTrickName(){
+	// trick_stance, trickFlip, trickRotation;
+	// Fakie
+	if (fakie == true) {
+		trick_stance = 'FAKIE ';
+	} else {
+		trick_stance = '';
+	}
+	// 180
+	if (oneEighty == true){
+		trickRotation = '180 ';
+	} else {
+		trickRotation = '';
+	}
+	// Flip
+	if (flip == true){
+		trickFlip = 'FLIP ';
+	} else {
+		trickFlip = 'OLLIE ';
+	}
+}
+
+function drawTrickName(){
+	var trickName_1 = trick_stance.concat(trickRotation);
+	var trickName_final = trickName_1.concat(trickFlip);
+	$('#trickName h1').text(trickName_final);
+}
+
 function resetValues(){
 	// Arrays
 	$air_ground = [],
@@ -335,9 +470,12 @@ function resetValues(){
 	totalTimeOnAir = 0,
 	jump_airtime = 0,
 	jump_speed = 0,
+	jump_counter = 0;
 	$jumps_speeds = [],
 	air_interval = 0,
-	elapsedTimeOnAir = 0;
+	elapsedTimeOnAir = 0,
+	before_jump = 0,
+	after_jump = 0;
 
 	// Angles and positions
 	initialYaw = 0, total_angle_diff = 0,
@@ -349,7 +487,14 @@ function resetValues(){
 
 	// Booleans
 	plus180 = false,
-	minus180 = false;
+	minus180 = false,
+	more_than_one_jump = false,
+	halfJump = false,
+	jump_ended = false,
+	jump = false,
+	trick_displayed = false;
+
+
 
 	// Position arrays
 	$total_yaws = [],
@@ -361,4 +506,14 @@ function resetValues(){
 
 	// Color arrays
 	$color_state = [];
+
+	// Tricks
+	halfFlip_1 = false, halfFlip_2 = false,
+	fakie = false, 
+	flip = false,
+	oneEighty = false;
+
+	previous_pitch_fakie = 0,
+	pitch_add = 0,
+	trick_stance, trickFlip, trickRotation;
 };

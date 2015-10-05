@@ -84,10 +84,12 @@ boolean output_errors = false;  // true or false
 //#define CALIBRATION__MAGN_USE_EXTENDED true
 //const float magn_ellipsoid_center[3] = {29.6772, 250.262, -17.7117};
 //const float magn_ellipsoid_transform[3][3] = {{0.889256, 0.000807715, -0.0243454}, {0.000807715, 0.941979, -0.00975540}, {-0.0243454, -0.00975540, 0.992947}};
+//#define CALIBRATION__MAGN_USE_EXTENDED true
+//const float magn_ellipsoid_center[3] = {-104.828, 170.092, 123.323};
+//const float magn_ellipsoid_transform[3][3] = {{0.874634, -0.0116772, -0.0109296}, {-0.0116772, 0.904187, -0.00352141}, {-0.0109296, -0.00352141, 0.998981}};
 #define CALIBRATION__MAGN_USE_EXTENDED true
-const float magn_ellipsoid_center[3] = {-104.828, 170.092, 123.323};
-const float magn_ellipsoid_transform[3][3] = {{0.874634, -0.0116772, -0.0109296}, {-0.0116772, 0.904187, -0.00352141}, {-0.0109296, -0.00352141, 0.998981}};
-
+const float magn_ellipsoid_center[3] = {308.185, 21.0414, -99.8733};
+const float magn_ellipsoid_transform[3][3] = {{0.890038, -0.0109357, -0.00526747}, {-0.0109357, 0.922192, -0.00836998}, {-0.00526747, -0.00836998, 0.998945}};
 
 
 // Gyroscope
