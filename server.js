@@ -1,3 +1,4 @@
+// http://127.0.0.1:3000/
 var express = require('express')
 var app = express()
 var port = 3000;
@@ -92,8 +93,7 @@ function parse(data){
 			parseInt(split[0]),
 			parseInt(split[1]),
 			parseInt(split[2]),
-			parseInt(split[3]),
-			parseInt(split[4])
+			parseInt(split[3])
 		]
 
 		$line = '',

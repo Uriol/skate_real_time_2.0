@@ -10,6 +10,8 @@ boolean jumping = false;
 
 float accel_jump = 0.6;
 
+float ground_air;
+
 void output_angles()
 { 
   // Reset jumping
@@ -20,9 +22,7 @@ void output_angles()
   _pitch = TO_DEG(pitch);
   _roll = TO_DEG(roll);
   Serial.println("---------------------------------------");
-//  Serial.print("YAW: "); Serial.println(_yaw);
-//  Serial.print("PITCH: "); Serial.println(_pitch);
-//  Serial.print("ROLL: "); Serial.println(_roll);
+
   
 
   rx = accel[0] * S;
@@ -54,14 +54,11 @@ void output_angles()
   fx = rx + gx;
   fy = ry + gy;
   fz = rz - gz;
-  // If moving very slow ---> set to 0
- // if ( fx <= 0.05 && fx >= -0.05 ) { fx = 0;}
 
-  
-  // if fz is very small set it to 0
-//  if (fz <= 0.99 && fz >= -0.99){
-//    fz = 0;
-//  }
+
+//  Serial.print("YAW: "); Serial.println(_yaw);
+//  Serial.print("PITCH: "); Serial.println(_pitch);
+//  Serial.print("ROLL: "); Serial.println(_roll);
 
 //  Serial.print("ACCEL X: "); Serial.println(rx);
 //  Serial.print("ACCEL Y: "); Serial.println(ry);
@@ -75,15 +72,7 @@ void output_angles()
 //  Serial.print("ACCEL - GRAVITY Y: "); Serial.println(fy);
 //  Serial.print("ACCEL - GRAVITY Z: "); Serial.println(fz);
 
-//  fz = fz*10;
-//  gy = gy*-1;
-//  fy = ry - gy;
-//  fy = fy*10;
-//      if (fz <= 5 && fz >= -5){
-//    fz = 0;
-//  }
-
-
+  
   // Know which axes are detecting gravity
   // X Axis
   if (gx >= 0.60 || gx <= -0.60){
@@ -107,31 +96,19 @@ void output_angles()
     }
   }
   
-  Serial.println("---------------------------------------");
+  
+    
   if(jumping == true){
     Serial.println("JUMP");
+    ground_air = 10;
   } else {
     Serial.println("GROUND");
+    ground_air = 0;
   }
-
-//  Serial.print("gravity: ");
-//  Serial.println(gz);
-//  Serial.print("acceleration: ");
-//  Serial.println(rz);
-//  Serial.print("final accel: ");
-//  Serial.print(fz);
-  
-  
-//   Serial.print(fx); Serial.print(",");
-//  Serial.print(fz); Serial.print(",");
-//  Serial.print(_yaw); Serial.print(",");
-//  Serial.print(_pitch); Serial.print(",");
-//  Serial.print(_roll); Serial.println("");
 
   
   // Sending over bluetooth
-  Serial1.print(fy); Serial1.print(",");
-  Serial1.print(fz); Serial1.print(",");
+  Serial1.print(ground_air); Serial1.print(",");
   Serial1.print(_yaw); Serial1.print(",");
   Serial1.print(_pitch); Serial1.print(",");
   Serial1.print(_roll); Serial1.println("");
